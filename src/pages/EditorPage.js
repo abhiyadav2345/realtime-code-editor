@@ -5,7 +5,7 @@ import { initSocket } from "../socket";
 import ACTIONS from "../Actions";
 import {
   useLocation,
-  reactNavigate,
+  // reactNavigate,
   useNavigate,
   Navigate,
   useParams,
@@ -39,13 +39,24 @@ const EditorPage = () => {
           if (username !== location.state?.username) {
             toast.success(`${username} joined the room.`);
           }
-         
 
           setClient(clients);
         }
       );
+
+      socketRef.current.on(ACTIONS.DISCONNECTED, ({ socketId, username }) => {
+        toast.success(`${username} left the room.`);
+        setClient((prev) => {
+          return prev.filter((client) => client.socketId !== socketId);
+        });
+      });
     };
     init();
+    return () => {
+      socketRef.current?.disconnect();
+      socketRef.current?.off(ACTIONS.JOINED);
+      socketRef.current?.off(ACTIONS.DISCONNECTED);
+    };
   }, []);
 
   if (!location.state) {
