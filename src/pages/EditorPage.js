@@ -1,22 +1,23 @@
 import React, { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 import Client from "../components/Client";
 import Editor from "../components/Editor";
 import { initSocket } from "../socket";
 import ACTIONS from "../Actions";
 import {
-  useLocation,
-  // reactNavigate,
-  useNavigate,
   Navigate,
+  useLocation,
+  useNavigate,
   useParams,
 } from "react-router-dom";
-import { toast } from "react-hot-toast";
 const EditorPage = () => {
   const socketRef = useRef(null);
   const location = useLocation();
-  const reactNavigator = useNavigate();
   const { roomId } = useParams();
+
+  const reactNavigator = useNavigate();
   const [clients, setClient] = useState([]);
+
   useEffect(() => {
     const init = async () => {
       socketRef.current = await initSocket();
@@ -25,25 +26,28 @@ const EditorPage = () => {
 
       function handleErrors(e) {
         console.log("socket error", e);
-        toast.error("Socket connection failed ,try again later.");
+        toast.error("socket connection failed, try again later.");
         reactNavigator("/");
       }
       socketRef.current.emit(ACTIONS.JOIN, {
         roomId,
         username: location.state?.username,
       });
-      // Listening for joined event
+
+      //Listening for joined event
       socketRef.current.on(
         ACTIONS.JOINED,
         ({ clients, username, socketId }) => {
           if (username !== location.state?.username) {
-            toast.success(`${username} joined the room.`);
+            toast.success(`${username} joined the room`);
+            console.log(`${username} joined`);
           }
 
           setClient(clients);
         }
       );
 
+      // Listening for disconected
       socketRef.current.on(ACTIONS.DISCONNECTED, ({ socketId, username }) => {
         toast.success(`${username} left the room.`);
         setClient((prev) => {
@@ -62,7 +66,7 @@ const EditorPage = () => {
   if (!location.state) {
     return <Navigate to="/" />;
   }
-
+  <Navigate />;
   return (
     <div className="mainWrap">
       <div className="aside">
@@ -82,7 +86,7 @@ const EditorPage = () => {
         <button className="btn leaveBtn">Leave</button>
       </div>
       <div className="editorWrap">
-        <Editor />
+        <Editor socketRef={socketRef} roomId={roomId} />
       </div>
     </div>
   );
