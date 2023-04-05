@@ -28,7 +28,7 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
           autoCloseTags: true,
           autoCloseBrackets: true,
           lineNumbers: true,
-          
+          doc: "# Online Python compiler (interpreter) to run Python online.\n# Write Python 3 code in this online editor and run it. \n print(&ldquo;Hello world &ldquo;)",
         }
       );
 
