@@ -32,7 +32,7 @@ const Home = () => {
   };
 
   const handleInputEnter = (e) => {
-    if (e.code == "Enter") joinRoom();
+    if (e.code === "Enter") joinRoom();
   };
   return (
     <div className="homePageWrapper">

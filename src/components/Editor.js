@@ -10,14 +10,6 @@ import ACTIONS from "../Actions";
 const Editor = ({ socketRef, roomId, onCodeChange }) => {
   const editorRef = useRef(null);
 
-
-
- const wrapper = useRef();
- const editorWillUnmount = () => {
-   editorRef.current.display.wrapper.remove();
-   wrapper.current.hydrated = false;
- };
-
   useEffect(() => {
     async function init() {
       editorRef.current = Codemirror.fromTextArea(
