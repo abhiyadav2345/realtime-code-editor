@@ -24,8 +24,6 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
         }
       );
 
-      
-
       editorRef.current.on("change", (instance, changes) => {
         // console.log("changes", changes);
         const { origin } = changes;
@@ -39,6 +37,7 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
       });
     }
     init();
+    // eslint-disable-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
